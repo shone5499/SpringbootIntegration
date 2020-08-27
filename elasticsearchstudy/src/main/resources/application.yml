@@ -1,0 +1,91 @@
+
+server:
+  port: 8080
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 数据库配置
+#  datasource:
+#    type: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/springboot_integration?useUnicode=true&characterEncoding=utf-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: root
+#    # Hikari 连接池配置
+#    # 最小空闲连接数量
+#    hikari:
+#      minimum-idle: 5
+#      # 空闲连接存活最大时间，默认600000（10分钟）
+#      idle-timeout: 180000
+#      # 连接池最大连接数，默认是10
+#      maximum-pool-size: 10
+#      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+#      auto-commit: true
+#      # 连接池名称
+#      pool-name: MyHikariCP
+#      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+#      max-lifetime: 1800000
+#      # 数据库连接超时时间,默认30秒，即30000
+#      connection-timeout: 30000
+#      connection-test-query: SELECT 1
+  datasource:
+    # 数据源基本配置
+    url: jdbc:mysql://localhost:3306/springboot_integration?useUnicode=true&characterEncoding=utf-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    # Druid数据源配置
+    druid:
+      # Druid 数据源配置，继承spring.datasource.* 配置，相同则覆盖
+      initial-size: 5
+      max-active: 30
+      min-idle: 5
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 5
+      # spring.datasource.druid.max-open-prepared-statements= #等价于上面的max-pool-prepared-statement-per-connection-size
+      validation-query: select 1
+      validation-query-timeout: 1
+      test-on-borrow: true
+      test-on-return: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30001
+      async-close-connection-enable: true
+      aop-patterns: com.shone.elasticsearchstudy.service.*
+      # 配置下面参数用于启动监控页面，考虑安全问题，默认是关闭的，按需开启
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: 123456
+      filter:
+        stat:
+          enabled: true
+          # 自定义StatFilter 配置 其他 Filter 不再演示
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 2000
+      web-stat-filter:
+        enabled: true
+
+#mybatis plus 设置
+mybatis-plus:
+  type-aliases-package: com.shone.elasticsearchstudy.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    jdbc-type-for-null: null
+    #详细打印sql日志和查询结果，生产环境请注释掉
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    # 关闭 mybatis-plus的 banner
+    banner: false
+
+es:
+  host: 192.168.101.163
+  port: 9200
+  scheme: http
+
+logging:
+  level:
+    root: debug
